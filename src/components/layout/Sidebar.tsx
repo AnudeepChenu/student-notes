@@ -1,10 +1,9 @@
-
 "use client";
+
+import { useRouter, usePathname } from "next/navigation";
 import { createClient } from "../../lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import {
   LayoutDashboard,
   BookOpen,
@@ -12,6 +11,7 @@ import {
   Bookmark,
   User,
   GraduationCap,
+  LogOut,
 } from "lucide-react";
 
 const links = [
@@ -24,10 +24,23 @@ const links = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    const supabase = createClient();
+
+    await supabase.auth.signOut();
+
+    router.replace("/login");
+    router.refresh();
+  }
 
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-gray-100 p-5 hidden md:flex flex-col">
-      <Link href="/" className="flex items-center gap-2 font-bold text-xl mb-12">
+      <Link
+        href="/"
+        className="flex items-center gap-2 font-bold text-xl mb-12"
+      >
         <GraduationCap className="text-indigo-600" />
         StudentNotes
       </Link>
@@ -58,24 +71,24 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="mt-auto bg-indigo-50 rounded-xl p-4">
-        <p className="text-sm font-semibold text-indigo-800">
-          Learn together.
-        </p>
-        <p className="text-xs text-indigo-600 mt-1">
-          Share knowledge and grow together.
-        </p>
+      <div className="mt-auto space-y-4">
+        <div className="bg-indigo-50 rounded-xl p-4">
+          <p className="text-sm font-semibold text-indigo-800">
+            Learn together.
+          </p>
+          <p className="text-xs text-indigo-600 mt-1">
+            Share knowledge and grow together.
+          </p>
+        </div>
+
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 transition"
+        >
+          <LogOut size={19} />
+          Logout
+        </button>
       </div>
     </aside>
   );
-}
-const router = useRouter();
-
-async function handleLogout() {
-  const supabase = createClient();
-
-  await supabase.auth.signOut();
-
-  router.replace("/login");
-  router.refresh();
 }

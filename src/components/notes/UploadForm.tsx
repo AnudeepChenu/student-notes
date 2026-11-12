@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Upload, FileText } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "../../lib/supabase/client";
 
 export default function UploadForm() {
   const router = useRouter();

@@ -3,7 +3,7 @@
 
 import { useMemo, useState } from "react";
 import { Search, Download, Bookmark, FileText } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "../../lib/supabase/client";
 
 interface Note {
   id: string;

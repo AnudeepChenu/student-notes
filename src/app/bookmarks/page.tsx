@@ -1,7 +1,7 @@
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotesExplorer from "@/components/notes/NotesExplorer";
-import { createClient } from "@/lib/supabase/server";
+import DashboardLayout from "../../components/layout/DashboardLayout";
+import NotesExplorer from "../../components/notes/NotesExplorer";
+import { createClient } from "../../lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export default async function BookmarksPage() {
