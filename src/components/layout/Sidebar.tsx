@@ -1,6 +1,8 @@
 
 "use client";
-
+import { createClient } from "../../lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -66,4 +68,14 @@ export default function Sidebar() {
       </div>
     </aside>
   );
+}
+const router = useRouter();
+
+async function handleLogout() {
+  const supabase = createClient();
+
+  await supabase.auth.signOut();
+
+  router.replace("/login");
+  router.refresh();
 }

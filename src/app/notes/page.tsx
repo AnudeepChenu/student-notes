@@ -1,30 +1,44 @@
 
-import DashboardLayout from "../../components/layout/DashboardLayout";
-import { Search, BookOpen } from "lucide-react";
+import DashboardLayout from "@/components/layout/DashboardLayout";
+import NotesExplorer from "@/components/notes/NotesExplorer";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default function NotesPage() {
+export default async function NotesPage() {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/login");
+
+  const { data: notes } = await supabase
+    .from("notes")
+    .select("*")
+    .eq("status", "published")
+    .order("created_at", { ascending: false })
+    .limit(100);
+
+  const { data: saved } = await supabase
+    .from("bookmarks")
+    .select("note_id")
+    .eq("user_id", user.id);
+
   return (
     <DashboardLayout>
       <h1 className="text-2xl font-bold">Explore Notes</h1>
-      <p className="text-sm text-gray-500 mt-2">
-        Discover study materials shared by students.
+
+      <p className="text-sm text-gray-500 mt-2 mb-7">
+        Discover academic materials shared by students.
       </p>
 
-      <div className="mt-8 flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3">
-        <Search size={20} className="text-gray-400" />
-        <input
-          placeholder="Search notes, subjects or topics..."
-          className="outline-none flex-1 text-sm"
-        />
-      </div>
-
-      <div className="bg-white border border-gray-100 rounded-2xl mt-6 p-16 text-center">
-        <BookOpen className="mx-auto text-gray-300" size={36} />
-        <h2 className="font-semibold mt-4">No notes available yet</h2>
-        <p className="text-sm text-gray-400 mt-2">
-          Uploaded notes will appear here.
-        </p>
-      </div>
+      <NotesExplorer
+        notes={notes || []}
+        userId={user.id}
+        initialBookmarks={(saved || []).map((item) => item.note_id)}
+      />
     </DashboardLayout>
   );
 }
+
