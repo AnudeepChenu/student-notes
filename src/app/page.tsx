@@ -7,7 +7,6 @@ import {
   ArrowRight,
   GraduationCap,
   Users,
-  FileText,
 } from "lucide-react";
 
 const features = [

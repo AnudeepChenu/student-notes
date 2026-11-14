@@ -4,6 +4,8 @@ import NotesExplorer from "../../components/notes/NotesExplorer";
 import { createClient } from "../../lib/supabase/server";
 import { redirect } from "next/navigation";
 
+export const instant = false;
+
 export default async function BookmarksPage() {
   const supabase = await createClient();
 
@@ -20,7 +22,7 @@ export default async function BookmarksPage() {
 
   const ids = (saved || []).map((item) => item.note_id);
 
-  let notes: any[] = [];
+  let notes = [];
 
   if (ids.length > 0) {
     const { data } = await supabase

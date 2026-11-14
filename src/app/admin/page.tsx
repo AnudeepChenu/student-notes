@@ -1,7 +1,9 @@
 
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import { createClient } from "@/lib/supabase/server";
+import DashboardLayout from "../../components/layout/DashboardLayout";
+import { createClient } from "../../lib/supabase/server";
 import { redirect } from "next/navigation";
+
+export const instant = false;
 
 export default async function AdminPage() {
   const supabase = await createClient();
